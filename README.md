@@ -18,7 +18,8 @@ Create an clark account and application in it.
 Create .env file in project directory. You need to fill variables below in that file.
 
 ```bash
-
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY={YOUR_CLERK_PUBLISHABLE_KEY}
+CLERK_SECRET_KEY={YOUR_CLERK_SECRET_KEY}
 ```
 
 ## Installation
