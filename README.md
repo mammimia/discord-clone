@@ -7,12 +7,14 @@ This is a Discord Clone App project. It was developed for learning purposes.
 - Next.js 14
 - Server Actions
 - Socket.io
+- Clerk
 - Prisma
 - Tailwind
 - MySQL
 
 ## Project Initialization Steps
 
+Create an clark account and application in it.
 Create .env file in project directory. You need to fill variables below in that file.
 
 ```bash
