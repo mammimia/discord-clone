@@ -7,6 +7,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu';
+import { useModal } from '@/hooks/use-modal-store';
 import { ServerWithMembersWithProfiles } from '@/types';
 import { MemberRole } from '@prisma/client';
 import {
@@ -25,6 +26,8 @@ interface ServerHeaderProps {
 }
 
 const ServerHeader = ({ server, role }: ServerHeaderProps) => {
+  const { onOpen } = useModal();
+
   const isAdmin = role === MemberRole.ADMIN;
   const isModerator = isAdmin || role === MemberRole.MODERATOR;
 
@@ -49,6 +52,7 @@ const ServerHeader = ({ server, role }: ServerHeaderProps) => {
           <DropdownMenuItem
             className="cursor-pointer px-3 py-2 text-sm
           text-indigo-600 dark:text-indigo-400"
+            onClick={() => onOpen('invite', { server })}
           >
             Invite People
             <UserPlus className="ml-auto h-4 w-4" />
