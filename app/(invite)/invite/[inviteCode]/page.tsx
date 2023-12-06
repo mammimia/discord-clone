@@ -25,7 +25,7 @@ const InviteCodePage = async ({ params }: InviteCodePageProps) => {
       inviteCode: params.inviteCode,
       members: {
         some: {
-          id: profile.id
+          profileId: profile.id
         }
       }
     }
