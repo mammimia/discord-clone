@@ -24,7 +24,7 @@ const DeleteServerModal = () => {
   const onConfirm = async () => {
     try {
       setIsLoading(true);
-      await axios.patch(`/api/servers/${data?.server?.id}/delete`);
+      await axios.delete(`/api/servers/${data?.server?.id}`);
 
       onClose();
       router.refresh();
@@ -44,11 +44,11 @@ const DeleteServerModal = () => {
             Delete Server
           </DialogTitle>
           <DialogDescription className="text-centers text-zinc-500">
-            Are you sure you want to delete{' '}
+            Are you sure you want to do this ? <br />
             <span className="font-semibold text-indigo-500">
               {data?.server?.name}
             </span>{' '}
-            server?
+            will be deleted permanently.
           </DialogDescription>
         </DialogHeader>
         <DialogFooter className="bg-gray-100 px-6 py-4">
