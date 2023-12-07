@@ -6,6 +6,7 @@ import EditServerModal from '@/components/modals/edit-server-modal';
 import InviteModal from '@/components/modals/invite-modal';
 import ManageMembersModal from '@/components/modals/manage-members-modal';
 import { useEffect, useState } from 'react';
+import LeaveServerModal from '../modals/leave-server-modal';
 
 const ModalProvider = () => {
   const [isMounted, setIsMounted] = useState(false);
@@ -25,6 +26,7 @@ const ModalProvider = () => {
       <InviteModal />
       <ManageMembersModal />
       <CreateChannelModal />
+      <LeaveServerModal />
     </>
   );
 };
