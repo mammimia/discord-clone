@@ -9,6 +9,7 @@ import {
   CommandList
 } from '@/components/ui/command';
 import { Search } from 'lucide-react';
+import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 interface ServerSearchProps {
@@ -27,6 +28,8 @@ interface ServerSearchProps {
 
 const ServerSearch = ({ data }: ServerSearchProps) => {
   const [isOpen, setIsOpen] = useState(false);
+  const router = useRouter();
+  const params = useParams();
 
   useEffect(() => {
     const down = (e: KeyboardEvent) => {
@@ -42,6 +45,22 @@ const ServerSearch = ({ data }: ServerSearchProps) => {
       window.removeEventListener('keydown', down);
     };
   }, []);
+
+  const onItemClick = ({
+    type,
+    id
+  }: {
+    type: 'channel' | 'member';
+    id: string;
+  }) => {
+    setIsOpen(false);
+
+    if (type === 'channel') {
+      router.push(`/servers/${params?.serverId}/channels/${id}`);
+    } else if (type === 'member') {
+      router.push(`/servers/${params?.serverId}/conversations/${id}`);
+    }
+  };
 
   return (
     <>
@@ -80,7 +99,10 @@ const ServerSearch = ({ data }: ServerSearchProps) => {
                 {data.map((item) => {
                   const { icon, name, id } = item;
                   return (
-                    <CommandItem key={id}>
+                    <CommandItem
+                      key={id}
+                      onSelect={() => onItemClick({ id, type })}
+                    >
                       {icon}
                       <span className="ml-2">{name}</span>
                     </CommandItem>
