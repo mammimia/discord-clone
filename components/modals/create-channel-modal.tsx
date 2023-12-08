@@ -29,6 +29,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { ChannelType } from '@prisma/client';
 import axios from 'axios';
 import { useParams, useRouter } from 'next/navigation';
+import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
@@ -56,9 +57,17 @@ const CreateChannelModal = () => {
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: '',
-      type: ChannelType.TEXT
+      type: data?.channelType || ChannelType.TEXT
     }
   });
+
+  useEffect(() => {
+    if (data?.channelType) {
+      form.setValue('type', data?.channelType);
+    } else {
+      form.setValue('type', ChannelType.TEXT);
+    }
+  }, [form, data?.channelType]);
 
   const isLoading = form.formState.isSubmitting;
 
