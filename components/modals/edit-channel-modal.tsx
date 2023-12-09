@@ -71,7 +71,7 @@ const EditChannelModal = () => {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      await axios.post(
+      await axios.patch(
         `/api/servers/${data?.server?.id}/channels/${data?.channel?.id}`,
         values
       );
