@@ -27,7 +27,7 @@ const ServerMember = ({ member, server }: ServerMemberProps) => {
 
   const onMemberClick = () => {
     if (params.memberId !== member.id) {
-      router.push(`/servers/${server.id}/members/${member.id}`);
+      router.push(`/servers/${server.id}/conversations/${member.id}`);
     }
   };
 
