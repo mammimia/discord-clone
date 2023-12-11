@@ -1,4 +1,3 @@
-import { Server as NextServer } from 'http';
 import { NextApiRequest } from 'next';
 import { Server as SocketServer } from 'socket.io';
 
