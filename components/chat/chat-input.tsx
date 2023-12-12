@@ -2,6 +2,7 @@
 
 import { Form, FormControl, FormField, FormItem } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import { useModal } from '@/hooks/use-modal-store';
 import { zodResolver } from '@hookform/resolvers/zod';
 import axios from 'axios';
 import { Plus, Smile } from 'lucide-react';
@@ -21,6 +22,8 @@ const formSchema = z.object({
 });
 
 const ChatInput = ({ apiUrl, query, name, type }: ChatInputProps) => {
+  const { onOpen } = useModal();
+
   const form = useForm<z.infer<typeof formSchema>>({
     defaultValues: {
       content: ''
@@ -55,7 +58,12 @@ const ChatInput = ({ apiUrl, query, name, type }: ChatInputProps) => {
                 <div className="relative p-4 pb-6">
                   <button
                     type="button"
-                    onClick={() => {}}
+                    onClick={() =>
+                      onOpen('messageFile', {
+                        apiUrl,
+                        query
+                      })
+                    }
                     className="absolute left-8 top-7 flex h-[24px] w-[24px] items-center
                     justify-center rounded-full bg-zinc-500 p-1 hover:bg-zinc-600 
                     dark:bg-zinc-400 dark:hover:bg-zinc-300"

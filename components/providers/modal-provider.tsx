@@ -10,6 +10,7 @@ import InviteModal from '@/components/modals/invite-modal';
 import LeaveServerModal from '@/components/modals/leave-server-modal';
 import ManageMembersModal from '@/components/modals/manage-members-modal';
 import { useEffect, useState } from 'react';
+import MessageFileModal from '@/components/modals/message-file-modal';
 
 const ModalProvider = () => {
   const [isMounted, setIsMounted] = useState(false);
@@ -33,6 +34,7 @@ const ModalProvider = () => {
       <DeleteServerModal />
       <DeleteChannelModal />
       <EditChannelModal />
+      <MessageFileModal />
     </>
   );
 };
