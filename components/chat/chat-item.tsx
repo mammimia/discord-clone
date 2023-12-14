@@ -3,7 +3,8 @@
 import { Member, MemberRole, Profile } from '@prisma/client';
 import UserAvatar from '@/components/ui/user-avatar';
 import ActionTooltip from '@/components/action-tooltip';
-import { ShieldAlert, ShieldCheck } from 'lucide-react';
+import { FileIcon, ShieldAlert, ShieldCheck } from 'lucide-react';
+import Image from 'next/image';
 
 interface ChatItemProps {
   id: string;
@@ -40,6 +41,17 @@ const ChatItem = ({
   socketUrl,
   socketQuery
 }: ChatItemProps) => {
+  const fileType = fileUrl?.split('.').pop();
+
+  const isAdmin = currentMember.role === MemberRole.ADMIN;
+  const isModerator = currentMember.role === MemberRole.MODERATOR;
+  const isOwner = currentMember.id === member.id;
+
+  const isDeletable = !deleted && (isAdmin || isModerator || isOwner);
+  const isEditable = !deleted && isOwner && !fileUrl;
+  const isPDF = fileType === 'pdf';
+  const isImage = fileUrl && !isPDF;
+
   return (
     <div
       className="hover: group relative flex w-full
@@ -63,7 +75,35 @@ const ChatItem = ({
               {timestamp}
             </span>
           </div>
-          {content}
+          {isImage && (
+            <a
+              href={fileUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="rounded-mb bg-secondary-500 relative mt-2 flex aspect-square
+              h-48 w-48 items-center overflow-hidden border"
+            >
+              <Image
+                src={fileUrl}
+                alt={content}
+                fill
+                className="object-cover"
+              />
+            </a>
+          )}
+          {isPDF && (
+            <div className="relative mt-2 flex items-center rounded-md bg-background/10 p-2">
+              <FileIcon className="h-10 w-10 fill-indigo-200 stroke-indigo-400" />
+              <a
+                href={fileUrl || ''}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="ml-2 text-sm text-indigo-500 hover:underline dark:text-indigo-400"
+              >
+                {fileUrl}
+              </a>
+            </div>
+          )}
         </div>
       </div>
     </div>
