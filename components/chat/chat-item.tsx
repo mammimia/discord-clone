@@ -66,7 +66,24 @@ const ChatItem = ({
 
   const onSubmit = (values) => {
     console.log(values);
+    setIsEditing(false);
   };
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setIsEditing(false);
+      }
+
+      if (e.key === 'Enter') {
+        form.handleSubmit(onSubmit)();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [form]);
 
   useEffect(() => {
     form.reset({
@@ -178,7 +195,13 @@ const ChatItem = ({
                     </FormItem>
                   )}
                 />
+                <Button size="sm" variant="primary">
+                  Save
+                </Button>
               </form>
+              <span className="mt-1 text-[10px] text-zinc-400">
+                Press escape to cancel, enter to save
+              </span>
             </Form>
           )}
         </div>
