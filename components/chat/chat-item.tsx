@@ -6,7 +6,14 @@ import { cn } from '@/lib/utils';
 import { Member, MemberRole, Profile } from '@prisma/client';
 import { Edit, FileIcon, ShieldAlert, ShieldCheck, Trash } from 'lucide-react';
 import Image from 'next/image';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { Form, FormControl, FormField, FormItem } from '@/components/ui/form';
+import qs from 'query-string';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+import { useForm } from 'react-hook-form';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
 
 interface ChatItemProps {
   id: string;
@@ -31,6 +38,10 @@ const roleIconMap = {
   [MemberRole.ADMIN]: <ShieldAlert className="ml-0.5 h-4 w-4 text-rose-500" />
 };
 
+const formSchema = z.object({
+  content: z.string().min(1, 'Message cannot be empty')
+});
+
 const ChatItem = ({
   id,
   content,
@@ -45,6 +56,23 @@ const ChatItem = ({
 }: ChatItemProps) => {
   const [isEditing, setIsEditing] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      content
+    }
+  });
+
+  const onSubmit = (values) => {
+    console.log(values);
+  };
+
+  useEffect(() => {
+    form.reset({
+      content
+    });
+  }, [form, content]);
 
   const fileType = fileUrl?.split('.').pop();
 
@@ -125,6 +153,34 @@ const ChatItem = ({
               )}
             </p>
           )}
+          {!fileUrl && isEditing && (
+            <Form {...form}>
+              <form
+                className="flex w-full items-center gap-x-2 pt-2"
+                onSubmit={form.handleSubmit(onSubmit)}
+              >
+                <FormField
+                  control={form.control}
+                  name="content"
+                  render={({ field }) => (
+                    <FormItem className="flex-1">
+                      <FormControl>
+                        <div className="relative w-full">
+                          <Input
+                            className="border-0 border-none bg-zinc-200/90
+                          p-2 text-zinc-600 focus-visible:ring-0 focus-visible:ring-offset-0
+                          dark:bg-zinc-700/75 dark:text-zinc-200"
+                            placeholder="Edit message..."
+                            {...field}
+                          />
+                        </div>
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+              </form>
+            </Form>
+          )}
         </div>
       </div>
       {isDeletable && (
@@ -135,6 +191,7 @@ const ChatItem = ({
           {isEditable && (
             <ActionTooltip label="Edit">
               <Edit
+                onClick={() => setIsEditing(true)}
                 className="ml-auto h-4 w-4 cursor-pointer text-zinc-500
               transition hover:text-zinc-600 dark:hover:text-zinc-300"
               />
