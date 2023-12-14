@@ -75,6 +75,9 @@ const ChatItem = ({
       });
 
       await axios.patch(url, values);
+
+      form.reset();
+      setIsEditing(false);
     } catch (error) {
       console.log(error);
     }
@@ -94,6 +97,7 @@ const ChatItem = ({
     window.addEventListener('keydown', handleKeyDown);
 
     return () => window.removeEventListener('keydown', handleKeyDown);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [form]);
 
   useEffect(() => {
