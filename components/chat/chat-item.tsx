@@ -1,19 +1,20 @@
 'use client';
 
 import ActionTooltip from '@/components/action-tooltip';
+import { Button } from '@/components/ui/button';
+import { Form, FormControl, FormField, FormItem } from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
 import UserAvatar from '@/components/ui/user-avatar';
 import { cn } from '@/lib/utils';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { Member, MemberRole, Profile } from '@prisma/client';
+import axios from 'axios';
 import { Edit, FileIcon, ShieldAlert, ShieldCheck, Trash } from 'lucide-react';
 import Image from 'next/image';
-import { useEffect, useState } from 'react';
-import { Form, FormControl, FormField, FormItem } from '@/components/ui/form';
 import qs from 'query-string';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
+import { z } from 'zod';
 
 interface ChatItemProps {
   id: string;
@@ -64,9 +65,19 @@ const ChatItem = ({
     }
   });
 
-  const onSubmit = (values) => {
-    console.log(values);
-    setIsEditing(false);
+  const isLoading = form.formState.isSubmitting;
+
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    try {
+      const url = qs.stringifyUrl({
+        url: `${socketUrl}/${id}`,
+        query: socketQuery
+      });
+
+      await axios.patch(url, values);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   useEffect(() => {
@@ -188,6 +199,7 @@ const ChatItem = ({
                           p-2 text-zinc-600 focus-visible:ring-0 focus-visible:ring-offset-0
                           dark:bg-zinc-700/75 dark:text-zinc-200"
                             placeholder="Edit message..."
+                            disabled={isLoading}
                             {...field}
                           />
                         </div>
@@ -195,7 +207,7 @@ const ChatItem = ({
                     </FormItem>
                   )}
                 />
-                <Button size="sm" variant="primary">
+                <Button disabled={isLoading} size="sm" variant="primary">
                   Save
                 </Button>
               </form>
