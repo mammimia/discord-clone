@@ -1,10 +1,12 @@
 'use client';
 
-import { Member, MemberRole, Profile } from '@prisma/client';
-import UserAvatar from '@/components/ui/user-avatar';
 import ActionTooltip from '@/components/action-tooltip';
-import { FileIcon, ShieldAlert, ShieldCheck } from 'lucide-react';
+import UserAvatar from '@/components/ui/user-avatar';
+import { cn } from '@/lib/utils';
+import { Member, MemberRole, Profile } from '@prisma/client';
+import { Edit, FileIcon, ShieldAlert, ShieldCheck } from 'lucide-react';
 import Image from 'next/image';
+import { useState } from 'react';
 
 interface ChatItemProps {
   id: string;
@@ -41,6 +43,9 @@ const ChatItem = ({
   socketUrl,
   socketQuery
 }: ChatItemProps) => {
+  const [isEditing, setIsEditing] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+
   const fileType = fileUrl?.split('.').pop();
 
   const isAdmin = currentMember.role === MemberRole.ADMIN;
@@ -54,8 +59,8 @@ const ChatItem = ({
 
   return (
     <div
-      className="hover: group relative flex w-full
-    items-center bg-black/5 p-4 transition"
+      className="group relative flex w-full
+    items-center p-4 transition hover:bg-black/5"
     >
       <div className="group flex w-full items-start gap-x-2">
         <div className="cursor-pointer transition hover:drop-shadow-md">
@@ -104,8 +109,39 @@ const ChatItem = ({
               </a>
             </div>
           )}
+          {!fileUrl && !isEditing && (
+            <p
+              className={cn(
+                'text-sm text-zinc-600 dark:text-zinc-300',
+                deleted &&
+                  'mt-1 text-xs italic text-zinc-500 dark:text-zinc-400'
+              )}
+            >
+              {content}
+              {isUpdated && !deleted && (
+                <span className="dark:test-zinc-400 mx-2 text-[10px] text-zinc-500">
+                  (edited)
+                </span>
+              )}
+            </p>
+          )}
         </div>
       </div>
+      {isDeletable && (
+        <div
+          className="absolute -top-2 right-5 hidden items-center gap-x-2 rounded-sm
+          border bg-white p-1 group-hover:flex dark:bg-zinc-800"
+        >
+          {isEditable && (
+            <ActionTooltip label="Edit">
+              <Edit
+                className="ml-auto h-4 w-4 cursor-pointer text-zinc-500
+              transition hover:text-zinc-600 dark:hover:text-zinc-300"
+              />
+            </ActionTooltip>
+          )}
+        </div>
+      )}
     </div>
   );
 };
