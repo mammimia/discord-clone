@@ -4,7 +4,7 @@ import ActionTooltip from '@/components/action-tooltip';
 import UserAvatar from '@/components/ui/user-avatar';
 import { cn } from '@/lib/utils';
 import { Member, MemberRole, Profile } from '@prisma/client';
-import { Edit, FileIcon, ShieldAlert, ShieldCheck } from 'lucide-react';
+import { Edit, FileIcon, ShieldAlert, ShieldCheck, Trash } from 'lucide-react';
 import Image from 'next/image';
 import { useState } from 'react';
 
@@ -140,6 +140,12 @@ const ChatItem = ({
               />
             </ActionTooltip>
           )}
+          <ActionTooltip label="Delete">
+            <Trash
+              className="ml-auto h-4 w-4 cursor-pointer text-zinc-500
+              transition hover:text-zinc-600 dark:hover:text-zinc-300"
+            />
+          </ActionTooltip>
         </div>
       )}
     </div>
