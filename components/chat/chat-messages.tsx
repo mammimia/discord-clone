@@ -5,7 +5,7 @@ import ChatWelcome from '@/components/chat/chat-welcome';
 import { useChatQuery } from '@/hooks/use-chat-query';
 import { Member, Message, Profile } from '@prisma/client';
 import { Loader2, ServerCrash } from 'lucide-react';
-import { Fragment } from 'react';
+import { Fragment, useRef, ElementRef } from 'react';
 import { format } from 'date-fns';
 import { useChatSocket } from '@/hooks/use-chat-socket';
 
@@ -40,6 +40,9 @@ const ChatMessages = ({
   paramValue,
   type
 }: ChatMessagesProps) => {
+  const chatRef = useRef<ElementRef<'div'>>(null);
+  const bottomRef = useRef<ElementRef<'div'>>(null);
+
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, status } =
     useChatQuery({
       queryKey: `chat:${chatId}`,
@@ -47,6 +50,7 @@ const ChatMessages = ({
       paramKey,
       paramValue
     });
+
   useChatSocket({
     queryKey: `chat:${chatId}`,
     addKey: `chat:${chatId}:messages`,
@@ -76,9 +80,9 @@ const ChatMessages = ({
   }
 
   return (
-    <div className="flex flex-1 flex-col overflow-y-auto py-4">
-      <div className="flex-1" />
-      <ChatWelcome type={type} name={name} />
+    <div ref={chatRef} className="flex flex-1 flex-col overflow-y-auto py-4">
+      {!hasNextPage && <div className="flex-1" />}
+      {!hasNextPage && <ChatWelcome type={type} name={name} />}
       <div className="mt-auto flex flex-col-reverse">
         {data?.pages.map((page, i) => (
           <Fragment key={i}>
@@ -100,6 +104,7 @@ const ChatMessages = ({
           </Fragment>
         ))}
       </div>
+      <div ref={bottomRef} />
     </div>
   );
 };
