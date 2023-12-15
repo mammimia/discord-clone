@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Form, FormControl, FormField, FormItem } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import UserAvatar from '@/components/ui/user-avatar';
+import { useModal } from '@/hooks/use-modal-store';
 import { cn } from '@/lib/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Member, MemberRole, Profile } from '@prisma/client';
@@ -56,7 +57,7 @@ const ChatItem = ({
   socketQuery
 }: ChatItemProps) => {
   const [isEditing, setIsEditing] = useState(false);
-  const [isDeleting, setIsDeleting] = useState(false);
+  const { onOpen } = useModal();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -238,6 +239,12 @@ const ChatItem = ({
           )}
           <ActionTooltip label="Delete">
             <Trash
+              onClick={() =>
+                onOpen('deleteMessage', {
+                  apiUrl: `${socketUrl}/${id}`,
+                  query: socketQuery
+                })
+              }
               className="ml-auto h-4 w-4 cursor-pointer text-zinc-500
               transition hover:text-zinc-600 dark:hover:text-zinc-300"
             />
