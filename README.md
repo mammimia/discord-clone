@@ -12,6 +12,7 @@ This is a Discord Clone App project. It was developed for learning purposes.
 - Tailwind
 - MySQL
 - UploadThing (File Upload)
+- LiveKit (Video-Audio Chat)
 
 ## Project Initialization Steps
 
