@@ -3,11 +3,12 @@
 import ChatItem from '@/components/chat/chat-item';
 import ChatWelcome from '@/components/chat/chat-welcome';
 import { useChatQuery } from '@/hooks/use-chat-query';
-import { Member, Message, Profile } from '@prisma/client';
-import { Loader2, ServerCrash } from 'lucide-react';
-import { Fragment, useRef, ElementRef } from 'react';
-import { format } from 'date-fns';
+import { useChatScroll } from '@/hooks/use-chat-scroll';
 import { useChatSocket } from '@/hooks/use-chat-socket';
+import { Member, Message, Profile } from '@prisma/client';
+import { format } from 'date-fns';
+import { Loader2, ServerCrash } from 'lucide-react';
+import { ElementRef, Fragment, useRef } from 'react';
 
 const DATE_FORMAT = 'd MMM yyyy, HH:mm';
 
@@ -55,6 +56,13 @@ const ChatMessages = ({
     queryKey: `chat:${chatId}`,
     addKey: `chat:${chatId}:messages`,
     updateKey: `chat:${chatId}:messages:update`
+  });
+  useChatScroll({
+    chatRef,
+    bottomRef,
+    loadMore: fetchNextPage,
+    shouldLoadMore: !isFetchingNextPage && !!hasNextPage,
+    count: data?.pages?.[0]?.items?.length ?? 0
   });
 
   if (status === 'pending') {
