@@ -11,6 +11,7 @@ This is a Discord Clone App project. It was developed for learning purposes.
 - Prisma
 - Tailwind
 - MySQL
+- UploadThing (File Upload)
 
 ## Project Initialization Steps
 
