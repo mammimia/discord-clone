@@ -98,10 +98,6 @@ const ChatItem = ({
       if (e.key === 'Escape') {
         setIsEditing(false);
       }
-
-      if (e.key === 'Enter') {
-        form.handleSubmit(onSubmit)();
-      }
     };
 
     window.addEventListener('keydown', handleKeyDown);

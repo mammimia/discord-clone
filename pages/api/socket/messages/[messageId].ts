@@ -1,7 +1,6 @@
 import { getCurrentProfile } from '@/lib/current-profile-pages';
 import { db } from '@/lib/db';
 import { NextApiResponseServerIo } from '@/types';
-import { is } from 'date-fns/locale';
 import { NextApiRequest } from 'next';
 
 export default async function handler(
@@ -77,7 +76,6 @@ export default async function handler(
     const isModerator = member.role === 'MODERATOR';
     const canModify = isMessageOwner || isAdmin || isModerator;
 
-    console.log(isMessageOwner, isAdmin, isModerator, canModify);
     if (!canModify) {
       return res.status(403).json({ error: 'Forbidden' });
     }
