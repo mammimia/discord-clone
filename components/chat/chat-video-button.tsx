@@ -21,6 +21,8 @@ const ChatVideoButton = () => {
       },
       { skipNull: true }
     );
+
+    router.push(url);
   };
 
   const Icon = isVideo ? VideoOff : Video;
